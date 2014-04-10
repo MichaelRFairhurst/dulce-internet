@@ -1,4 +1,5 @@
 #include <cairo/cairo-xlib.h>
+#include <unistd.h>
 #include "window.h"
 #include "constants.h"
 #include "fade.h"

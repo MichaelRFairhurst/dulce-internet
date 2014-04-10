@@ -1,4 +1,8 @@
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "text.h"
+#include "window.h"
 #include "constants.h"
 
 letter_move* makeMove(char startletter, char endletter, int startx, int starty, int endx, int endy) {
@@ -109,7 +113,7 @@ void printLetterMovePercentage(cairo_t* cairo, letter_move* which, int percentag
 }
 
 void animateTexts(cairo_t* cairo, char* text1, char* text2) {
-	int i = 0, percentage;
+	int percentage;
 	letter_move** movements = rearrangeLetters(text1, text2);
 	//cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
 	saveState();

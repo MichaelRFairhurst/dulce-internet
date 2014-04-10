@@ -8,3 +8,6 @@ bin/main: bin/main.o bin/window.o bin/line.o bin/fade.o bin/heart.o bin/text.o
 
 bin/%.o: %.c
 	cc -o $@ ${CFLAGS} -c $<
+
+clean:
+	rm bin/*
