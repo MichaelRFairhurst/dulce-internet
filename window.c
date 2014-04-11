@@ -33,6 +33,17 @@ void restoreState() {
 	updateScreen();
 }
 
+void shift(int x, int y) {
+	saveState();
+	cairo_set_source_rgb(cairo, 1,1,1);
+	cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
+	cairo_fill(cairo);
+	cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
+	cairo_set_source_surface(cairo, surface_copy, x, y);
+	cairo_fill(cairo);
+	updateScreen();
+}
+
 void updateScreen() {
 	cairo_rectangle(xcairo, 0, 0, WIDTH, HEIGHT);
 	cairo_fill(xcairo);

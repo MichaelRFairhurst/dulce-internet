@@ -29,9 +29,13 @@ int main(int argc, char** argv) {
 	updateScreen();
 	fadeBetween(getCairo(), backgroundA, backgroundB, 10000);
 	drawHeart(getCairo(), 20, 20, 250, 250, 10000);
-	drawHeart(getCairo(), 300, 300, 450, 250, 10000);
-	//fadeOutSelection(getCairo());
+	//drawHeart(getCairo(), 270, 270, 350, 150, 10000);
+	//drawHeart(getCairo(), 20, 270, 250, 150, 10000);
+	//drawHeart(getCairo(), 270, 20, 350, 250, 10000);
+	fadeOutSelection(getCairo(), 20, 20, 250, 250);
+	centerSelection(20, 20, 250, 250);
 	sleep(2);
+	saveState();
 	animateTexts(getCairo(), "fat rumple cat", "rumple cat fat");
 	restoreState();
 	animateTexts(getCairo(), "rumple cat fat", "hello my love, Dulce!");
