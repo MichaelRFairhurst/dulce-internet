@@ -46,6 +46,8 @@ int main(int argc, char** argv) {
 	restoreState();
 	animateTexts(getCairo(), "How many people does it take to monitor a cat?", "It depends on whether or not you consider the cat to be a person monitoring itself!");
 	sleep(2);
+	fadeBetween(getCairo(), backgroundB, getSavedSurface(), 10000);
+	sleep(2);
 	return 0;
 }
 

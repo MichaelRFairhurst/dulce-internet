@@ -114,7 +114,7 @@ void fadeOutSelection(cairo_t* cairo, int x, int y, int w, int h) {
 	saveState();
 	double fade;
 
-	for(fade = 0; fade <= 1; fade += .01) {
+	for(fade = 0; fade <= 1.1; fade += .01) {
 		restoreState();
 		drawHeartPercentage(cairo, x, y, w, h, 1);
 		cairo_close_path_inverted(cairo);

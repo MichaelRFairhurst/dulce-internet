@@ -26,8 +26,36 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 	int movements_count = 0;
 	int* text1_found = malloc(strlen(text1) * sizeof(int));
 	int* text2_found = malloc(strlen(text2) * sizeof(int));
+	int* text1_offsets = malloc(strlen(text1) * sizeof(int));
+	int* text2_offsets = malloc(strlen(text2) * sizeof(int));
 	memset(text1_found, 0, strlen(text1) * sizeof(int));
 	memset(text2_found, 0, strlen(text2) * sizeof(int));
+
+	cairo_text_extents_t textextents;
+	textextents.x_bearing = 0;
+    textextents.y_bearing = 0;
+    textextents.width = 0;
+    textextents.height = 0;
+    textextents.x_advance = 0;
+    textextents.y_advance = 0;
+	for(i = 0; i < strlen(text1); i++) {
+		char* copy = strdup(text1);
+		copy[i] = 0; // shorten string
+
+		cairo_text_extents(getCairo(), copy, &textextents);
+
+		text1_offsets[i] = textextents.x_advance + i * 1;
+		free(copy);
+	}
+	for(i = 0; i < strlen(text2); i++) {
+		char* copy = strdup(text2);
+		copy[i] = 0; // shorten string
+
+		cairo_text_extents(getCairo(), copy, &textextents);
+
+		text2_offsets[i] = textextents.x_advance + i * 1;
+		free(copy);
+	}
 
 	for(i = 0; i < strlen(text1); i++) {
 		for(c = 0; c < strlen(text2); c++) {
@@ -35,7 +63,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 			if(text1[i] == text2[c]) {
 				text1_found[i] = 1;
 				text2_found[c] = 1;
-				letter_move* currentmove = makeMove(text1[i], text2[c], i * 15, 50, c * 15, 50);
+				letter_move* currentmove = makeMove(text1[i], text2[c], text1_offsets[i], 50, text2_offsets[c], 50);
 				movements = realloc(movements, sizeof(letter_move*) * (movements_count + 2));
 				movements[movements_count] = currentmove;
 				movements[++movements_count] = NULL;
@@ -50,7 +78,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 			if(text2_found[c]) continue;
 			text1_found[i] = 1;
 			text2_found[c] = 1;
-			letter_move* currentmove = makeMove(text1[i], text2[c], i * 15, 50, c * 15, 50);
+			letter_move* currentmove = makeMove(text1[i], text2[c], text1_offsets[i], 50, text2_offsets[c], 50);
 			movements = realloc(movements, sizeof(letter_move*) * (movements_count + 2));
 			movements[movements_count] = currentmove;
 			movements[++movements_count] = NULL;
@@ -60,7 +88,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 
 	for(i = 0; i < strlen(text1); i++) {
 		if(text1_found[i]) continue;
-		letter_move* currentmove = makeMove(text1[i], 0, i * 15, 50, i * 15, 50);
+		letter_move* currentmove = makeMove(text1[i], 0, text1_offsets[i], 50, text1_offsets[i], 50);
 		movements = realloc(movements, sizeof(letter_move*) * (movements_count + 2));
 		movements[movements_count] = currentmove;
 		movements[++movements_count] = NULL;
@@ -68,13 +96,13 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 
 	for(i = 0; i < strlen(text2); i++) {
 		if(text2_found[i]) continue;
-		letter_move* currentmove = makeMove(0, text2[i], i * 15, 50, i * 15, 50);
+		letter_move* currentmove = makeMove(0, text2[i], text2_offsets[i], 50, text2_offsets[i], 50);
 		movements = realloc(movements, sizeof(letter_move*) * (movements_count + 2));
 		movements[movements_count] = currentmove;
 		movements[++movements_count] = NULL;
 	}
 
-	free(text1_found); free(text2_found);
+	free(text1_found); free(text2_found); free(text1_offsets); free(text2_offsets);
 	return movements;
 }
 

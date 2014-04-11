@@ -60,6 +60,10 @@ void updateScreen() {
 	}
 }
 
+cairo_surface_t* getSavedSurface() {
+	return surface_copy;
+}
+
 int openWindow() {
 	dpy = XOpenDisplay(NULL);
 	if (dpy == NULL) {
