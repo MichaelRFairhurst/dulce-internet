@@ -13,7 +13,7 @@ typedef struct {
 	int end_y;
 } letter_move;
 
-letter_move* makeMove(char, char, int, int, int, int);
+letter_move* makeMove(char, char, int, int);
 letter_move** rearrangeLetters(char*, char*);
 void printLetterMovePercentage(cairo_t*, letter_move*, int);
 void animateTexts(cairo_t*, char*, char*);
