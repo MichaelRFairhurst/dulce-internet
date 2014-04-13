@@ -7,7 +7,7 @@
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-void cairo_close_path_inverted(cairo_t* cairo)  {
+void cairo_close_path_inverted(cairo_t* cairo) {
 	/**
 	 *       4
 	 *    _______
@@ -41,7 +41,7 @@ void drawHeart(cairo_t* cairo, int x, int y, int w, int h, int speed) {
 		restoreState();
 		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
 		cairo_new_path(cairo);
-		cairo_set_line_width(cairo, 15);
+		cairo_set_line_width(cairo, 5);
 		cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
 
 		drawHeartPercentage(cairo, x, y, w, h, percentage);
@@ -123,7 +123,7 @@ void fadeOutSelection(cairo_t* cairo, int x, int y, int w, int h) {
 
 		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
 		cairo_new_path(cairo);
-		cairo_set_line_width(cairo, 15);
+		cairo_set_line_width(cairo, 5);
 		cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
 		drawHeartPercentage(cairo, x, y, w, h, 1);
 
@@ -142,7 +142,7 @@ void centerSelection(int x, int y, int w, int h) {
 	double percentage;
 	coord midpoint;
 
-	for(percentage = 0;  percentage <= 1; percentage += 0.01) {
+	for(percentage = 0; percentage <= 1; percentage += 0.01) {
 		cutLine(x, y, leftx, topy, percentage, &midpoint);
 		shift(midpoint.x - lastx, midpoint.y - lasty);
 		lastx = midpoint.x; lasty = midpoint.y;

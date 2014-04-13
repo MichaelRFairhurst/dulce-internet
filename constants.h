@@ -1,3 +1,4 @@
-#define WIDTH 908
-#define HEIGHT 885
-#define TEXT_HEIGHT 600
+#define WIDTH 320
+#define HEIGHT 240
+#define TEXT_HEIGHT 200
+#define TEXT_DIST 30

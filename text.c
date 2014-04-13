@@ -13,8 +13,8 @@ letter_move* makeMove(char startletter, char endletter, int startx, int endx) {
 	currentmove->start_y = TEXT_HEIGHT;
 	currentmove->end_x = endx;
 	currentmove->end_y = TEXT_HEIGHT;
-	currentmove->mid_x = (startx + endx) / 2 + (rand() % 120) - 60;
-	currentmove->mid_y = TEXT_HEIGHT + (rand() % 120) - 60;
+	currentmove->mid_x = (startx + endx) / 2 + (rand() % (TEXT_DIST*2)) - TEXT_DIST;
+	currentmove->mid_y = TEXT_HEIGHT + (rand() % (TEXT_DIST*2)) - TEXT_DIST;
 	return currentmove;
 }
 
