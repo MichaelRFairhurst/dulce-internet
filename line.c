@@ -2,7 +2,7 @@
 #include "line.h"
 #include "constants.h"
 
-void cutLine(int startx, int starty, int endx, int endy, double ratio, coord* output) {
+void cutLine(double startx, double starty, double endx, double endy, double ratio, coord* output) {
 	coord start;
 	coord end;
 

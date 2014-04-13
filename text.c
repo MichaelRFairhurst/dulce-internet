@@ -167,7 +167,7 @@ void animateTexts(cairo_t* cairo, char* text1, char* text2) {
 			i++;
 		}
 		updateScreen();
-		usleep(percentage == 0 ? 1000000 : 20000);
+		usleep(percentage == 0 ? 3000000 : 20000);
 	}
 
 	int i = 0;

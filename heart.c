@@ -136,7 +136,7 @@ void fadeOutSelection(cairo_t* cairo, int x, int y, int w, int h) {
 void centerSelection(int x, int y, int w, int h) {
 
 	int leftx = (WIDTH - w)/2;
-	int topy = (HEIGHT - h)/2;
+	int topy = (TEXT_HEIGHT - h)/2;
 
 	int lastx = x, lasty = y;
 	double percentage;
@@ -144,7 +144,7 @@ void centerSelection(int x, int y, int w, int h) {
 
 	for(percentage = 0; percentage <= 1; percentage += 0.01) {
 		cutLine(x, y, leftx, topy, percentage, &midpoint);
-		shift(midpoint.x - lastx, midpoint.y - lasty);
+		shift(((int) midpoint.x) - lastx, ((int) midpoint.y) - lasty);
 		lastx = midpoint.x; lasty = midpoint.y;
 		usleep(10000);
 	}
