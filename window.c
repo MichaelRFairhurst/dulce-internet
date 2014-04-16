@@ -76,6 +76,10 @@ int openWindow() {
 
 	XSelectInput(dpy, w, ExposureMask);
 	XMapWindow(dpy, w);
+	XEvent e;
+	while (XNextEvent(dpy, &e)) {
+		if(e.type == Expose) break;
+	}
 
 	xsurface = cairo_xlib_surface_create(dpy, w, DefaultVisual(dpy, 0), WIDTH, HEIGHT);
 	xcairo = cairo_create(xsurface);
