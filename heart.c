@@ -36,9 +36,7 @@ void drawHeart(cairo_t* cairo, int x, int y, int w, int h, int speed) {
 	cairo_set_line_width(cairo, 11);
 	cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
 
-	saveState();
 	while(percentage < 1) {
-		restoreState();
 		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
 		cairo_new_path(cairo);
 		cairo_set_line_width(cairo, 5);
@@ -111,11 +109,11 @@ void drawHeartPercentage(cairo_t* cairo, int x, int y, int w, int h, double perc
 }
 
 void fadeOutSelection(cairo_t* cairo, int x, int y, int w, int h) {
-	saveState();
+	//saveState();
 	double fade;
 
 	for(fade = 0; fade <= 1.1; fade += .01) {
-		restoreState();
+		cairo_new_path(cairo);
 		drawHeartPercentage(cairo, x, y, w, h, 1);
 		cairo_close_path_inverted(cairo);
 		cairo_set_source_rgba(cairo, 1, 1, 1, fade);
