@@ -14,8 +14,8 @@ typedef struct {
 } letter_move;
 
 letter_move* makeMove(char, char, int, int);
-letter_move** rearrangeLetters(char*, char*);
-void printLetterMovePercentage(cairo_t*, letter_move*, int);
+letter_move** rearrangeLetters(char*, char*, cairo_t*);
+void printLetterMovePercentage(cairo_t*, letter_move*, double);
 void animateTexts(cairo_t*, char*, char*);
 
 #endif

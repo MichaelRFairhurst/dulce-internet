@@ -29,14 +29,15 @@ void cairo_close_path_inverted(cairo_t* cairo) {
 }
 
 void drawHeart(cairo_t* cairo, int x, int y, int w, int h, int speed) {
-	double percentage = 0;
+	double percentage = 0.005;
 
 	cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
 	cairo_new_path(cairo);
 	cairo_set_line_width(cairo, 11);
 	cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
 
-	while(percentage < 1) {
+	while(percentage <= 1) {
+		cairo_t* target = percentage == 1 ? cairo : getDirectCairo();
 		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
 		cairo_new_path(cairo);
 		cairo_set_line_width(cairo, 5);
@@ -112,22 +113,25 @@ void fadeOutSelection(cairo_t* cairo, int x, int y, int w, int h) {
 	//saveState();
 	double fade;
 
-	for(fade = 0; fade <= 1.1; fade += .01) {
-		cairo_new_path(cairo);
-		drawHeartPercentage(cairo, x, y, w, h, 1);
-		cairo_close_path_inverted(cairo);
-		cairo_set_source_rgba(cairo, 1, 1, 1, fade);
-		cairo_fill(cairo);
+	cairo_t* target = getDirectCairo();
+	for(fade = 0; fade <= 1.1; fade += .002) {
+		if(fade > 1) target = cairo;
 
-		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
-		cairo_new_path(cairo);
-		cairo_set_line_width(cairo, 5);
-		cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
-		drawHeartPercentage(cairo, x, y, w, h, 1);
+		cairo_new_path(target);
+		drawHeartPercentage(target, x, y, w, h, 1);
+		cairo_close_path_inverted(target);
+		cairo_set_source_rgba(target, 1, 1, 1, fade);
+		cairo_fill(target);
 
-		cairo_stroke_preserve(cairo);
-		updateScreen();
-		usleep(10000);
+		cairo_set_source_rgb(target, 0.9, 0.5, 0.5);
+		cairo_new_path(target);
+		cairo_set_line_width(target, 5);
+		cairo_set_line_cap(target, CAIRO_LINE_CAP_ROUND);
+		drawHeartPercentage(target, x, y, w, h, 1);
+
+		cairo_stroke_preserve(target);
+		if(fade > 1) updateScreen();
+		usleep(20000);
 	}
 }
 

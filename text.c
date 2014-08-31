@@ -18,7 +18,7 @@ letter_move* makeMove(char startletter, char endletter, int startx, int endx) {
 	return currentmove;
 }
 
-letter_move** rearrangeLetters(char* text1, char* text2) {
+letter_move** rearrangeLetters(char* text1, char* text2, cairo_t* cairo) {
 	int i, c;
 	letter_move** movements = malloc(sizeof(letter_move*));
 	movements[0] = NULL;
@@ -43,7 +43,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 		char* copy = strdup(text1);
 		copy[i] = 0; // shorten string
 
-		cairo_text_extents(getCairo(), copy, &textextents);
+		cairo_text_extents(cairo, copy, &textextents);
 
 		text1_offsets[i] = textextents.x_advance + i * 1;
 
@@ -59,7 +59,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 		char* copy = strdup(text2);
 		copy[i] = 0; // shorten string
 
-		cairo_text_extents(getCairo(), copy, &textextents);
+		cairo_text_extents(cairo, copy, &textextents);
 
 		text2_offsets[i] = textextents.x_advance + i * 1;
 
@@ -119,7 +119,7 @@ letter_move** rearrangeLetters(char* text1, char* text2) {
 	return movements;
 }
 
-void printLetterMovePercentage(cairo_t* cairo, letter_move* which, int percentage) {
+void printLetterMovePercentage(cairo_t* cairo, letter_move* which, double percentage) {
 	int delta_x;
 	int delta_y;
 	int start_x;
@@ -127,7 +127,7 @@ void printLetterMovePercentage(cairo_t* cairo, letter_move* which, int percentag
 	double alpha = 1;
 	char current_letter;
 	if(percentage < 50) {
-		if(!which->end_letter) alpha = 1 - percentage / 50.0;
+		if(which->start_letter != which->end_letter) alpha = 1 - percentage / 50.0;
 		percentage *= 2;
 		start_x = which->start_x;
 		start_y = which->start_y;
@@ -136,7 +136,7 @@ void printLetterMovePercentage(cairo_t* cairo, letter_move* which, int percentag
 		current_letter = which->start_letter;
 	} else {
 		percentage -= 50;
-		if(!which->start_letter) alpha = percentage / 50.0;
+		if(which->start_letter != which->end_letter) alpha = percentage / 50.0;
 		percentage *= 2;
 		start_x = which->mid_x;
 		start_y = which->mid_y;
@@ -148,26 +148,27 @@ void printLetterMovePercentage(cairo_t* cairo, letter_move* which, int percentag
 	alpha *= 0.4;
 
 	cairo_move_to(cairo, start_x + delta_x / 100.0 * percentage, start_y + delta_y / 100.0 * percentage);
-	char* buf = malloc(2); buf[0] = current_letter; buf[1] = 0;
+	char buf[2] = { current_letter, 0};
 	cairo_set_source_rgba(cairo, 0, 0, 0, alpha);
 	cairo_show_text(cairo, buf);
-	free(buf);
+		consumeEvents();
 }
 
 void animateTexts(cairo_t* cairo, char* text1, char* text2) {
-	int percentage;
-	letter_move** movements = rearrangeLetters(text1, text2);
+	cairo = getDirectCairo();
+	double percentage;
+	letter_move** movements = rearrangeLetters(text1, text2, cairo);
 	//cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
 	saveState();
-	for(percentage = 0; percentage <= 100; percentage++) {
+	for(percentage = 0; percentage <= 100; percentage += .5) {
 		int i = 0;
-		restoreState();
+		restoreStatePartial(0, TEXT_HEIGHT - TEXT_DIST, WIDTH, TEXT_DIST * 2);
 		while(movements[i]) {
 			printLetterMovePercentage(cairo, movements[i], percentage);
 			i++;
 		}
-		updateScreen();
-		usleep(percentage == 0 ? 3000000 : 20000);
+		//updateScreen();
+		usleep(percentage == 0 ? 3000000 : 15000);
 	}
 
 	int i = 0;

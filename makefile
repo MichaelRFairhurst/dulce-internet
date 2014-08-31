@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g -I/usr/X11R6/include `pkg-config --cflags cairo`
+CFLAGS=-Wall -g -I/usr/X11R6/include `pkg-config --cflags cairo` -O3
 LDFLAGS=-Wall -g `pkg-config --libs cairo` -L/usr/X11R6/lib -lX11 -lpng
 
 all: bin/main

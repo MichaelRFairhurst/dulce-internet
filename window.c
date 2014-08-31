@@ -15,19 +15,20 @@ static Display *dpy;
 Window w;
 
 void saveState() {
-	cairo_set_source_rgb(cairo_copy, 0,0,0);
-	cairo_rectangle(cairo_copy, 0, 0, WIDTH, HEIGHT);
-	cairo_fill(cairo_copy);
 	cairo_set_source_surface(cairo_copy, surface, 0, 0);
 	cairo_rectangle(cairo_copy, 0, 0, WIDTH, HEIGHT);
 	cairo_fill(cairo_copy);
 }
 
 void restoreState() {
-	cairo_set_source_rgb(cairo, 0,0,0);
 	cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
+	cairo_set_source_surface(cairo, surface_copy, 0, 0);
 	cairo_fill(cairo);
-	cairo_rectangle(cairo, 0, 0, WIDTH, HEIGHT);
+	updateScreen();
+}
+
+void restoreStatePartial(int x, int y, int w, int h) {
+	cairo_rectangle(cairo, x, y, w, h);
 	cairo_set_source_surface(cairo, surface_copy, 0, 0);
 	cairo_fill(cairo);
 	updateScreen();
@@ -45,8 +46,13 @@ void shift(int x, int y) {
 }
 
 void updateScreen() {
+	cairo_set_source_surface(xcairo, surface, 0, 0);
 	cairo_rectangle(xcairo, 0, 0, WIDTH, HEIGHT);
 	cairo_fill(xcairo);
+	consumeEvents();
+}
+
+void consumeEvents() {
 	while (XPending(dpy)) {
 		XEvent e;
 		XNextEvent(dpy, &e);
@@ -72,14 +78,10 @@ int openWindow() {
 	}
 
 	w = XCreateSimpleWindow(dpy, RootWindow(dpy, 0),
-	                        970 - (WIDTH>>1), 970, WIDTH, HEIGHT, 0, 0, BlackPixel(dpy, 0));
+	                        0, 0, WIDTH, HEIGHT, 0, 0, BlackPixel(dpy, 0));
 
-	XSelectInput(dpy, w, ExposureMask);
 	XMapWindow(dpy, w);
 	XEvent e;
-	while (XNextEvent(dpy, &e)) {
-		if(e.type == Expose) break;
-	}
 
 	xsurface = cairo_xlib_surface_create(dpy, w, DefaultVisual(dpy, 0), WIDTH, HEIGHT);
 	xcairo = cairo_create(xsurface);
@@ -93,4 +95,8 @@ int openWindow() {
 
 cairo_t* getCairo() {
 	return cairo;
+}
+
+cairo_t* getDirectCairo() {
+	return xcairo;
 }
