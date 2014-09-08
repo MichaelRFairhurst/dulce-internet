@@ -45,10 +45,10 @@ int main(int argc, char** argv) {
 		restoreState();
 		animateTexts(getCairo(), "Alone or with friends, I always need you by my side", "You're my everything and I love you so much <3");
 		sleep(5);
-		fadeBetween(getCairo(), kiss, getSavedSurface(), 10000);
-		drawHeart(getCairo(), 145, 120, 60, 50, 10000);
-		saveState();
-		sleep(10);
+		//fadeBetween(getCairo(), kiss, getSavedSurface(), 10000);
+		//drawHeart(getCairo(), 145, 120, 60, 50, 10000);
+		//saveState();
+		//sleep(10);
 		fadeBetween(getCairo(), beach, getSavedSurface(), 10000);
 		drawHeart(getCairo(), 20, 4, 130, 128, 10000);
 		fadeOutSelection(getCairo(), 20, 4, 130, 128);
