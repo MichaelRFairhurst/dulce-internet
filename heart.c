@@ -38,16 +38,16 @@ void drawHeart(cairo_t* cairo, int x, int y, int w, int h, int speed) {
 
 	while(percentage <= 1) {
 		cairo_t* target = percentage == 1 ? cairo : getDirectCairo();
-		cairo_set_source_rgb(cairo, 0.9, 0.5, 0.5);
-		cairo_new_path(cairo);
-		cairo_set_line_width(cairo, 5);
-		cairo_set_line_cap(cairo, CAIRO_LINE_CAP_ROUND);
+		cairo_set_source_rgb(target, 0.9, 0.5, 0.5);
+		cairo_new_path(target);
+		cairo_set_line_width(target, 5);
+		cairo_set_line_cap(target, CAIRO_LINE_CAP_ROUND);
 
-		drawHeartPercentage(cairo, x, y, w, h, percentage);
-		cairo_stroke_preserve(cairo);
+		drawHeartPercentage(target, x, y, w, h, percentage);
+		cairo_stroke_preserve(target);
 
+		if(percentage == 1) updateScreen();
 		percentage += 0.005;
-		updateScreen();
 		usleep(speed);
 	}
 }
